@@ -1,9 +1,27 @@
+import os
 import joblib
 import pandas as pd
 
+# Absolute path to project root
+BASE_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "..")
+)
+
+MODEL_PATH = os.path.join(
+    BASE_DIR,
+    "models",
+    "bug_model.pkl"
+)
+
+FEATURES_PATH = os.path.join(
+    BASE_DIR,
+    "models",
+    "features.pkl"
+)
+
 # Load model and feature list
-model = joblib.load("models/bug_model.pkl")
-features = joblib.load("models/features.pkl")
+model = joblib.load(MODEL_PATH)
+features = joblib.load(FEATURES_PATH)
 
 
 def predict_bug(loc, vg, evg, branch_count, total_op):
@@ -16,7 +34,6 @@ def predict_bug(loc, vg, evg, branch_count, total_op):
         'total_Op': total_op
     }])
 
-    # Ensure correct feature order
     data = data[features]
 
     prediction = model.predict(data)[0]
